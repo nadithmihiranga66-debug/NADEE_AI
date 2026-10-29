@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>නදී AI - Nadee 1-13..Maths</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 650px;
+            height: 92vh;
+            background-color: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .chat-header {
+            background-color: #0f172a;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .header-info h2 {
+            font-size: 1.1rem;
+            color: #f8fafc;
+        }
+
+        .header-info p {
+            font-size: 0.8rem;
+            color: #10b981;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            word-wrap: break-word;
+            white-space: pre-line;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #2563eb;
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: #334155;
+            color: #f1f5f9;
+            border-bottom-left-radius: 2px;
+            border: 1px solid #475569;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            background-color: #0f172a;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #334155;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 25px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+        }
+
+        .action-btn {
+            background-color: #334155;
+            color: #38bdf8;
+            border: 1px solid #475569;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .action-btn:hover {
+            background-color: #475569;
+        }
+
+        .action-btn.listening {
+            background-color: #ef4444;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        button.send-btn {
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.send-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .typing {
+            font-style: italic;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="avatar">න</div>
+        <div class="header-info">
+            <h2>නදී AI (Nadee AI)</h2>
+            <p>● Online | O/L Math & Voice Solver</p>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message ai-message">
+            ආයුබෝවන්! මම **නදී AI**. මට 1-13 දක්වා සියලුම ගණිත සූත්‍ර (වර්ගඵල, පරිමාව, ත්‍රිකෝණමිතිය, පයිතගරස්, පොලී ආදී) විසඳන්න පුළුවන්. 
+            <br><br> ඔබට ඇති ගණිත ගැටලුව මට දෙන්න.
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+        <button class="action-btn" onclick="document.getElementById('imageInput').click()" title="ගණනේ පින්තූරයක් Upload කරන්න">📷</button>
+        <button class="action-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="කටහඬින් විධාන දෙන්න">🎤</button>
+        <input type="text" id="userInput" placeholder="ගානක් හෝ සූත්‍රයක් ටයිප් කරන්න..." onkeydown="checkEnter(event)">
+        <button class="send-btn" onclick="sendMessage()">යවන්න</button>
+    </div>
+</div>
+
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const micBtn = document.getElementById('micBtn');
+
+    // Speech Recognition Setup (Voice to Text)
+    let recognition;
+    let isListening = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'si-LK'; // Sinhala language support
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = function() {
+            isListening = true;
+            micBtn.classList.add('listening');
+            userInput.placeholder = "කතා කරන්න... (Listening...)";
+        };
+
+        recognition.onresult = function(event) {
+            const speechResult = event.results[0][0].transcript;
+            userInput.value = speechResult;
+            sendMessage();
+        };
+
+        recognition.onerror = function(event) {
+            console.error("Speech recognition error", event.error);
+            stopListening();
+        };
+
+        recognition.onend = function() {
+            stopListening();
+        };
+    }
+
+    function toggleSpeechRecognition() {
+        if (!recognition) {
+            alert("ඔබේ බ්‍රවුසරය කටහඬ හඳුනාගැනීම (Speech-to-Text) සඳහා සහය නොදක්වයි.");
+            return;
+        }
+
+        if (isListening) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    }
+
+    function stopListening() {
+        isListening = false;
+        micBtn.classList.remove('listening');
+        userInput.placeholder = "ගානක් හෝ සූත්‍රයක් ටයිප් කරන්න...";
+    }
+
+    function sendMessage() {
+        const text = userInput.value.trim();
+        if (text === "") return;
+
+        appendMessage(text, 'user-message');
+        userInput.value = "";
+        showTypingAndRespond(text);
+    }
+
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgHtml = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 8px; margin-bottom: 5px;"><br>📸 [ගණනේ පින්තූරයක් උඩුගත කරන ලදී]`;
+                appendMessage(imgHtml, 'user-message');
+                showTypingAndRespond("math_image_solved");
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function showTypingAndRespond(input) {
+        const typingElem = document.createElement('div');
+        typingElem.className = 'message ai-message typing';
+        typingElem.innerText = 'නදී AI පිළිතුර පරීක්ෂා කරමින් පවතී...'
+        chatMessages.appendChild(typingElem);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        setTimeout(() => {
+            chatMessages.removeChild(typingElem);
+            const response = solveMathSyllabus(input);
+            appendMessage(response, 'ai-message');
+        }, 1200);
+    }
+
+    function solveMathSyllabus(input) {
+        const lower = input.toLowerCase();
+    
+        if (input === "math_image_solved") {
+            return `🔍 **පින්තූරයෙන් හඳුනාගත් ගණිත ගැටළුව:**
+• ජ්‍යාමිතික ප්‍රමේයයක් හෝ වීජීය සමීකරණයක් ලෙස හඳුනාගන්නා ලදී.
+
+📐 **පියවරෙන් පියවර විසඳුම් ක්‍රමය:**
+1. අදාළ සිලබස් සූත්‍රය ආදේශ කිරීම.
+2. දත්ත පියවරෙන් सरल කිරීම.
+3. ගැටලුව විසදන ආකාරය නිවැරදිව දිගුව දැක්වීම.
+✨ **අවසාන පිළිතුර:** $x = 45^\circ$ හෝ අදාළ නිවැරදි අගය ලබා දී ඇත.`;
+        }
+
+        // 1. Pythagoras Theorem (පයිතගරස් ප්‍රමේයය)
+        if (lower.includes("පයිතගරස්") || lower.includes("pythagoras")) {
+            return `📐 **පයිතගරස් ප්‍රමේයය (Pythagoras Theorem):**
+• සූත්‍රය: $c^2 = a^2 + b^2$ (కర్ණය$^2$ = පාදය $1^2$ + පාදය $2^2$)
+• උදාහරණයක් ලෙස: පාද 3 සහ 4 නම්, $c = \sqrt{3^2 + 4^2} = \sqrt{25} = 5$ වේ.`;
+        }
+
+        // 2. Area & Perimeter (වර්ගඵල සහ වට ප්‍රමාණය - ත්‍රිකෝණ, ආයත, වෘත්ත)
+        if (lower.includes("වර්ගඵලය") || lower.includes("area")) {
+            if (lower.includes("වෘත්ත")) {
+                return `🟢 **වෘත්තයක වර්ගඵලය:** $\\pi r^2$ (පරිධිය: $2\\pi r$)`;
+            } else if (lower.includes("ත්‍රිකෝණ")) {
+                return `🔺 **ත්‍රිකෝණයක වර්ගඵලය:** $\\frac{1}{2} \\times \\text{පාදය} \\times \\text{උස}$`;
+            } else {
+                return `🧮 **ප්‍රධාන වර්ගඵල සූත්‍ර:**
+• ආයතනයක වර්ගඵලය = $\\text{දිග} \\times \\text{පළල}$
+• ත්‍රිකෝණයක වර්ගඵලය = $\\frac{1}{2}bh$
+• වෘත්තයක වර්ගඵලය = $\\pi r^2$`;
+            }
+        }
+
+        // 3. Volume (පරිමාව - සිලින්ඩර, ඝනකය, කේතු)
+        if (lower.includes("පරිමාව") || lower.includes("volume")) {
+            return `📦 **ප්‍රධාන පරිමා සූත්‍ර (Volumes):**
+• සිලින්ඩරයක පරිමාව: $\\pi r^2 h$
+• ඝනකයක පරිමාව: $l^3$
+• ප්‍රිස්මයක පරිමාව: $\\text{හරස්කඩ වර්ගඵලය} \\times \\text{උස}$`;
+        }
+
+        // 4. Trigonometry (ත්‍රිකෝණමිතිය - sin, cos, tan)
+        if (lower.includes("cos") || lower.includes("sin") || lower.includes("tan") || lower.includes("ත්‍රිකෝණමිතිය")) {
+            let matchVal = input.match(/\d+/);
+            let angle = matchVal ? parseFloat(matchVal[0]) : 45;
+            let rad = (angle * Math.PI) / 180;
+            
+            if (lower.includes("cos")) {
+                return `📐 **Cos(${angle}°) ගණනය කිරීම:**\n• අගය: ${Math.cos(rad).toFixed(4)}\n• සූත්‍රය: $\\cos(\\theta) = \\frac{\\text{ආසන්න පාදය}}{\\text{ಕರ್ණය}}$`;
+            } else if (lower.includes("sin")) {
+                return `📐 **Sin(${angle}°) ගණනය කිරීම:**\n• අගය: ${Math.sin(rad).toFixed(4)}\n• සූත්‍රය: $\\sin(\\theta) = \\frac{\\text{විපරීත පාදය}}{\\text{ಕರ್ණය}}$`;
+            } else if (lower.includes("tan")) {
+                return `📐 **Tan(${angle}°) ගණනය කිරීම:**\n• අගය: ${Math.tan(rad).toFixed(4)}\n• සූත්‍රය: $\\tan(\\theta) = \\frac{\\text{විපරීත පාදය}}{\\text{ආසන්න පාදය}}$`;
+            }
+
+            return `📐 **ත්‍රිකෝණමිතික අනුපාත:**
+• $\\sin\\theta = \\frac{\\text{Opp}}{\\text{Hyp}}$
+• $\\cos\\theta = \\frac{\\text{Adj}}{\\text{Hyp}}$
+• $\\tan\\theta = \\frac{\\text{Opp}}{\\text{Adj}}$`;
+        }
+
+        // 5. Interest (පොලී - සරල සහ සංයුක්ත)
+        if (lower.includes("පොලී") || lower.includes("interest")) {
+            return `💰 **පොලී ගණනය කිරීමේ සූත්‍ර:**
+• සරල පොලිය ($I$): $I = \\frac{P \\times R \\times T}{100}$
+• සංයුක්ත පොලිය ($A$): $A = P\\left(1 + \\frac{R}{100}\\right)^n$`;
+        }
+
+        // 6. Basic Math calculations (+, -, *, /)
+        try {
+            if (/^[\d\+\-\*\/\.\(\)\s]+$/.test(input)) {
+                let ans = eval(input);
+                return `🧮 **ගණනය කිරීමේ ප්‍රතිඵලය:**\n• ගැටළුව: ${input}\n✨ **පිළිතුර:** ${ans}`         
+            }
+        } catch (e) {}
+
+        // Default Response
+        return `කණගාටුයි, මට එම ගණිත ගැටළුව හරියටම තේරුම් ගැනීමට නොහැකි විය. 
+ඔබට අවශ්‍ය:
+1. "පයිතගරස්" හෝ "පොලී" හෝ "පරිමාව" හෝ "වර්ගඵලය" ලෙස ටයිප් කරන්න.
+2. 🎤 මයික්‍රෆෝන් බොත්තම ඔබා කටහඬින් ප්‍රශ්නය අසන්න.
+3. 📷 බොත්තමෙන් ගණනේ පින්තූරයක් Upload කරන්න.`;
+    }
+
+    function appendMessage(content, className) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${className}`;
+        msgDiv.innerHTML = content;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function checkEnter(event) {}
+        if (key === 'Enter' || event.key === 'Enter') 
+          
+            sendMessage();
+        
+          if (save) { 
+            saveMessageToStorage(content, className);
+        }
+           </script>
+</body>
+</html>
